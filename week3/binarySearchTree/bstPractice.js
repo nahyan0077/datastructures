@@ -1,0 +1,108 @@
+class Node {
+    constructor(value) {
+        this.value = value
+        this.left = null
+        this.right = null
+    }
+}
+class binarySearchTree {
+    constructor() {
+        this.root = null
+    }
+    insert(value){
+        const node = new Node(value)
+        if (this.root == null) {
+            this.root = node
+        }else{
+            this.insertNode(this.root,node)
+        }
+    }
+    insertNode(root,node){
+        if (node.value < root.value) {
+            if (root.left == null) {
+                root.left = node
+            }else{
+                this.insertNode(root.left,node)
+            }
+        }else{
+            if (root.right == null) {
+                root.right = node
+            }else{
+                this.insertNode(root.right,node)
+            }
+        }
+    }
+    levelOrder(){
+        let queue = []
+        queue.push(this.root)
+        while (queue.length) {
+            let curr = queue.shift()
+            console.log(curr.value);
+            if(curr.left){
+                queue.push(curr.left)
+            }
+            if (curr.right) {
+                queue.push(curr.right)
+            }
+        }
+    }
+    min(root){
+        if (!root.left) {
+            return root.value
+        }else{
+            this.min(root.left)
+        }
+
+    }
+    preOrder(root){
+        if (root) {
+            console.log(root.value);
+            this.preOrder(root.left)
+            this.preOrder(root.right)
+        }
+    }
+    delete(value){
+        this.root = this.deleteNode(this.root,value)
+    }
+    deleteNode(root,value){
+        if (root == null) {
+            return root
+        }
+        if (value < root.value) {
+            this.deleteNode(root.left,value)
+        }else if(value > root.value){
+            this.deleteNode(root.right,value)
+        }else{
+            if (!root.left && !root.right) {
+                return null
+            }
+            if (!root.left) {
+                return root.right
+            }else if(!root.right){
+                return root.left
+            }
+            root.value = this.min(root.right)
+            root.right = this.deleteNode(root.right,root.value)
+        }
+        return root
+    }
+}
+
+const bst = new binarySearchTree()
+
+bst.insert(10)
+bst.insert(54)
+bst.insert(67)
+bst.insert(4)
+bst.insert(95)
+
+bst.levelOrder()
+
+bst.delete(67)
+console.log("--------------");
+
+bst.levelOrder()
+
+// bst.preOrder(bst.root)
+
+console.log(bst);
